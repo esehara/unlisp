@@ -1,12 +1,9 @@
+require 'unlisp/token'
 module Unlisp
   module Lexer
     class Token < Struct.new(:type, :value)
       # Token types
-      INTEGER  = 1
-      STRING   = 2
-      ATOM     = 3
-      LIST     = 4
-      ERROR    = 5
+      include Unlisp::Token
     end
 
     def tokenize str
