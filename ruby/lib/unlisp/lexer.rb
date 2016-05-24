@@ -19,7 +19,7 @@ module Unlisp
       parse_result = []
       while !lst.empty?
         token = tokenize(lst.shift)
-        if token.type == Token::LIST
+        if token.list?
           token.value = list_analyzer(token.value)
         end
         parse_result << token

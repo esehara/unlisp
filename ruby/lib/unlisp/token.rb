@@ -6,5 +6,9 @@ module Unlisp
     ATOM     = 3
     LIST     = 4
     ERROR    = 5
+
+    def list?
+      type == LIST
+    end
   end
 end
