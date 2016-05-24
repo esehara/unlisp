@@ -3,7 +3,7 @@ require 'unlisp/lexer'
 module Unlisp
   module Parser
 
-    def apply lst
+    def eval_map lst
       lst.map do |x|
         if x.list?
           x = list_eval x.value
@@ -28,7 +28,7 @@ module Unlisp
 
     def plus lst
       lst.shift
-      lst = apply lst
+      lst = eval_map lst
       lst.reduce {|x, y| x.value + y.value}
     end
   end
