@@ -1,5 +1,6 @@
 module Unlisp
-  module Token
+  class Token < Struct.new(:type, :value)
+    # Token types
     INTEGER  = 1
     STRING   = 2
     ATOM     = 3

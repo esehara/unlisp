@@ -1,11 +1,6 @@
 require 'unlisp/token'
 module Unlisp
   module Lexer
-    class Token < Struct.new(:type, :value)
-      # Token types
-      include Unlisp::Token
-    end
-
     def tokenize str
       return Token.new(Token::LIST, str) if str.is_a? Array
       case str
