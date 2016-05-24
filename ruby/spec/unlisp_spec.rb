@@ -67,8 +67,16 @@ describe Unlisp do
   describe Unlisp::Parser do
     it '["+", "1", "1"] is 2' do
       lst = Unlisp::Lexer::list_analyzer ["+", "1", "1"]
-      psr = Unlisp::Parser::lst
-      expect(lst.type).to eq(Unlisp::Parser::INTEGER)
+      psr = Unlisp::Parser::list_eval lst
+      expect(psr.type).to eq(Unlisp::Token::INTEGER)
+      expect(psr.value).to eq(2)
+    end
+
+    it '["+", ["+", "1", "1"], "1"] is 3' do
+      lst = Unlisp::Lexer::list_analyzer ["+", ["+", "1", "1"], "1"]
+      psr = Unlisp::Parser::list_eval lst
+      expect(psr.type).to eq(Unlisp::Token::INTEGER)
+      expect(psr.value).to eq(3)
     end
   end
 end
