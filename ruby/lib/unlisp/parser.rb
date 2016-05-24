@@ -20,7 +20,7 @@ module Unlisp
           Token.new(Unlisp::Token::INTEGER, plus(lst))
         when "print"
           lst.shift
-          lst = apply lst
+          lst = eval_map lst
           puts lst.value
         end
       end
