@@ -87,5 +87,11 @@ describe Unlisp do
       env, lst, psr = analyze_and_eval ["do", ["def", "x", "1"], ["+", "x", "x"]]
       expect(psr.type).to eq(Unlisp::Token::INTEGER)
     end
+
+    it '[["fn", "x", ["+", "x", "x"]], "2"] is 4' do
+      env, lst, psr = analyze_and_eval [["fn", "x", ["+", "x", "x"]], "2"]
+      expect(psr.type).to eq(Unlisp::Token::INTEGER)
+      expect(psr.value).to eq(4)
+    end
   end
 end
