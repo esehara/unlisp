@@ -29,6 +29,18 @@ module Unlisp
         return result_lst, result_env
       elsif lst[0].atom?
         case lst[0].value
+        when "if"
+          lst[1] = list_eval(lst[1], env) if lst[1].list?
+          if lst[1].true?
+            lst[2] = list_eval(lst[2], env) if lst[2].list?
+            lst[2]
+          else
+            lst[3] = list_eval(lst[3], env) if lst[3].list?
+            lst[3]
+          end
+        when "<"
+          fst, snd = eval_map([lst[1], lst[2]], env)
+          fst.value < snd.value ? Token.true : Token.false
         when "def"
           env.env! [lst[1], lst[2]]
           return lst, env
@@ -53,7 +65,7 @@ module Unlisp
           lst[1].value.shift
           return lst[1], env
         else
-          return env.get atom, env
+          return env.get lst[0], env
         end
       end
     end

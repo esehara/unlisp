@@ -10,6 +10,22 @@ module Unlisp
     FUNCTION = 5
     ERROR    = 6
 
+    def self.false
+      Token.new(INTEGER, 0)
+    end
+
+    def self.true
+      Token.new(INTEGER, 1)
+    end
+
+    def false?
+      integer? && value == 0
+    end
+
+    def true?
+      integer? && value == 1
+    end
+
     def initialize(type, value)
       @type = type
       @value = value

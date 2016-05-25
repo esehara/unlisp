@@ -99,5 +99,20 @@ describe Unlisp do
       expect(psr.type).to eq(Unlisp::Token::INTEGER)
       expect(psr.value).to eq(5)
     end
+
+    it '["<", ["+", "1", "2"], "5"] is 1' do
+      env, lst, psr = analyze_and_eval ["<", ["+", "1", "2"], "5"]
+      expect(psr.type).to eq(Unlisp::Token::INTEGER)
+      expect(psr.value).to eq(1)
+    end
+
+    it '["if", ["<", "3", "2"], ["+", "x", "x"], ["+", "2", "2"]] is 4' do
+      env, lst, psr = analyze_and_eval ["if",
+                                        ["<", "3", "2"],
+                                        ["+", "x", "x"],
+                                        ["+", "2", "2"]]
+      expect(psr.type).to eq(Unlisp::Token::INTEGER)
+      expect(psr.value).to eq(4)
+    end
   end
 end
