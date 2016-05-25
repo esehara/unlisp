@@ -14,13 +14,6 @@ describe Unlisp do
       expect(one.value).to eq(1)
     end
 
-    it '"string" is String' do
-      s = Unlisp::Lexer::tokenize '"String"'
-      str = Unlisp::Token::STRING
-      expect(s.type).to eq(str)
-      expect(s.value).to eq("String")
-    end
-
     it 'atom is Atom' do
       a = Unlisp::Lexer::tokenize 'atom'
       atom = Unlisp::Token::ATOM

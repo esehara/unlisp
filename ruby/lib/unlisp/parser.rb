@@ -2,7 +2,6 @@ require 'unlisp/lexer'
 
 module Unlisp
   module Parser
-
     def eval_map lst
       lst.map do |x|
         if x.list?

@@ -6,8 +6,6 @@ module Unlisp
       case str
       when /\d+/
         Token.new(Token::INTEGER, str.to_i)
-      when /"(.+)"/
-        Token.new(Token::STRING, $1)
       when /(\D.*)/
         Token.new(Token::ATOM, $1)
       else
