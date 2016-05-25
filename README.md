@@ -45,5 +45,5 @@ Example:
 ["def", "x", "1"]
 # fn closure
 [["fn", "x", ["fn", "y", ["+" "x" "y"]]] "1"] "2"]
-["def", "plus-one", ["fn" ["x"] ["+" "x" "1"]]]
+["def", "plus-one", ["fn" "x" ["+" "x" "1"]]]
 ```
