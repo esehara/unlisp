@@ -8,15 +8,16 @@ module Unlisp
     FUNCTION = 5
     ERROR    = 6
 
-    def env!
-    end
-
     def print
       if list?
         value.map {|x| x.value}.to_s
       else
         value
       end
+    end
+
+    def integer?
+      type == INTEGER
     end
 
     def list?

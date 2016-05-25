@@ -61,7 +61,7 @@ describe Unlisp do
     def analyze_and_eval lst
       env = Unlisp::Env.new
       lst = Unlisp::Lexer::list_analyzer lst
-      psr, env = Unlisp::Parser::apply(lst, env)
+      psr, env = Unlisp::Parser::list_eval lst, env
       return env, lst, psr
     end
 
@@ -83,9 +83,9 @@ describe Unlisp do
       expect(psr.value).to eq(4)
     end
 
-    it '["do" ["fn", "x", "1"] ["+", "x", "x"]] results 2' do
-      env, lst, psr = analyze_and_eval ["do", ["fn", "x", "1"], ["+", "x", "x"]]
-      expect(psr[1].type).to eq(Unlisp::Token::FUNCTION)
+    it '["do" ["def", "x", "1"] ["+", "x", "x"]] results 2' do
+      env, lst, psr = analyze_and_eval ["do", ["def", "x", "1"], ["+", "x", "x"]]
+      expect(psr.type).to eq(Unlisp::Token::INTEGER)
     end
   end
 end
