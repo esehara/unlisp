@@ -5,8 +5,8 @@ module Unlisp
     def eval_map(lst, env)
       lst.map do |x|
         if x.list?
-          lst, _ = list_eval(x.value, env)
-          lst
+          x, _ = list_eval(x.value, env)
+          x
         elsif x.integer?
           x
         else
@@ -74,7 +74,11 @@ module Unlisp
     def plus lst, env
       lst.shift
       lst = eval_map(lst, env)
-      lst.reduce {|x, y| x.value + y.value}
+      lst.reduce do |x, y|
+        x, _ = list_eval(x, env) if x.list?
+        y, _ = list_eval(y, env) if y.list?
+        x.value + y.value
+      end
     end
   end
 
