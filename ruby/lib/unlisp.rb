@@ -2,6 +2,7 @@ require "unlisp/version"
 require "unlisp/lexer"
 require "unlisp/token"
 require "unlisp/parser"
+require "unlisp/env"
 
 module Unlisp
   class Machine

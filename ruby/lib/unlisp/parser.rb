@@ -12,6 +12,21 @@ module Unlisp
       end
     end
 
+    def apply lst, env
+      if lst[0].atom?
+        case lst[0].value
+        when "fn"
+        when "do"
+          lst.shift
+          last_line = nil
+          lst.each {|x| last_line, env = apply(x.value, env) }
+          return last_line, env
+        else
+          return (list_eval lst), env
+        end
+      end
+    end
+
     def list_eval lst
       if lst[0].atom?
         case lst[0].value
@@ -19,7 +34,7 @@ module Unlisp
           Token.new(Unlisp::Token::INTEGER, plus(lst))
         when "println"
           lst.shift
-          puts eval_map(lst).map {|x| x.print}
+          puts eval_map(lst, env).map {|x| x.print}
         when "'"
           lst.shift
           Token.new(Unlisp::Token::LIST, lst)
@@ -28,10 +43,6 @@ module Unlisp
         when "tail"
           lst[1].value.shift
           lst[1]
-        when "do"
-          lst.shift
-          lst.each {|x| last_line = list_eval(x.value) }
-          last_line
         end
       end
     end

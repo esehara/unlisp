@@ -58,18 +58,34 @@ describe Unlisp do
   end
 
   describe Unlisp::Parser do
+    def analyze_and_eval lst
+      env = Unlisp::Env.new
+      lst = Unlisp::Lexer::list_analyzer lst
+      psr, env = Unlisp::Parser::apply(lst, env)
+      return env, lst, psr
+    end
+
     it '["+", "1", "1"] is 2' do
-      lst = Unlisp::Lexer::list_analyzer ["+", "1", "1"]
-      psr = Unlisp::Parser::list_eval lst
+      env, lst, psr = analyze_and_eval ["+", "1", "1"]
       expect(psr.type).to eq(Unlisp::Token::INTEGER)
       expect(psr.value).to eq(2)
     end
 
     it '["+", ["+", "1", "1"], "1"] is 3' do
-      lst = Unlisp::Lexer::list_analyzer ["+", ["+", "1", "1"], "1"]
-      psr = Unlisp::Parser::list_eval lst
+      env, lst, psr = analyze_and_eval ["+", ["+", "1", "1"], "1"]
       expect(psr.type).to eq(Unlisp::Token::INTEGER)
       expect(psr.value).to eq(3)
+    end
+
+    it '["do" ["+" "1" "1"] ["+" "2" "2"]] return last eval token' do
+      env, lst, psr = analyze_and_eval ["do", ["+", "1", "1"], ["+", "2", "2"]]
+      expect(psr.type).to eq(Unlisp::Token::INTEGER)
+      expect(psr.value).to eq(4)
+    end
+
+    it '["do" ["fn", "x", "1"] ["+", "x", "x"]] results 2' do
+      env, lst, psr = analyze_and_eval ["do", ["fn", "x", "1"], ["+", "x", "x"]]
+      expect(psr[1].type).to eq(Unlisp::Token::FUNCTION)
     end
   end
 end

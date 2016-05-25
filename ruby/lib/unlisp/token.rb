@@ -5,7 +5,11 @@ module Unlisp
     # STRING   = 2
     ATOM     = 3
     LIST     = 4
-    ERROR    = 5
+    FUNCTION = 5
+    ERROR    = 6
+
+    def env!
+    end
 
     def print
       if list?
