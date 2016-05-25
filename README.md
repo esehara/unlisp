@@ -1,4 +1,4 @@
-# Unlisp -- Ultra minimal Lisp
+# Unlisp -- Ultra miNimal Lisp
 
 ## Perpose
 
@@ -44,6 +44,6 @@ Example:
 ```rb
 ["def", "x", "1"]
 # fn closure
-["fn", ["x"], ["fn", ["y"], ["+" "x" "y"]]]]
+[["fn", "x", ["fn", "y", ["+" "x" "y"]]] "1"] "2"]
 ["def", "plus-one", ["fn" ["x"] ["+" "x" "1"]]]
 ```
