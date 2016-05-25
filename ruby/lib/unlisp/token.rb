@@ -20,6 +20,10 @@ module Unlisp
       type == INTEGER
     end
 
+    def function?
+      type == FUNCTION
+    end
+
     def list?
       type == LIST
     end
@@ -34,6 +38,8 @@ module Unlisp
             "List"
           when INTEGER
             "Integer"
+          when FUNCTION
+            "Function"
           end
       "- #{t}: #{value}"
     end
