@@ -13,14 +13,25 @@ module Unlisp
     end
 
     def list_eval lst
-      if lst[0].type == Unlisp::Token::ATOM
+      if lst[0].atom?
         case lst[0].value
         when "+"
           Token.new(Unlisp::Token::INTEGER, plus(lst))
-        when "print"
+        when "println"
           lst.shift
-          lst = eval_map lst
-          puts lst.value
+          puts eval_map(lst).map {|x| x.print}
+        when "'"
+          lst.shift
+          Token.new(Unlisp::Token::LIST, lst)
+        when "head"
+          lst[1].value[1]
+        when "tail"
+          lst[1].value.shift
+          lst[1]
+        when "do"
+          lst.shift
+          lst.each {|x| last_line = list_eval(x.value) }
+          last_line
         end
       end
     end
