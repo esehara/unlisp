@@ -88,10 +88,16 @@ describe Unlisp do
       expect(psr.type).to eq(Unlisp::Token::INTEGER)
     end
 
-    it '[["fn", "x", ["+", "x", "x"]], "2"] is 4' do
-      env, lst, psr = analyze_and_eval [["fn", "x", ["+", "x", "x"]], "2"]
+    it '[["fn", "x", ["+", "x", "1"]], "6"] is 7' do
+      env, lst, psr = analyze_and_eval [["fn", "x", ["+", "x", "1"]], "6"]
       expect(psr.type).to eq(Unlisp::Token::INTEGER)
-      expect(psr.value).to eq(4)
+      expect(psr.value).to eq(7)
+    end
+
+    it '[[["fn", "x", ["fn", "y", ["+", "x", "y"]]], "2"], "3"] is 5' do
+      env, lst, psr = analyze_and_eval [[["fn", "x", ["fn", "y", ["+", "x", "y"]]], "2"], "3"]
+      expect(psr.type).to eq(Unlisp::Token::INTEGER)
+      expect(psr.value).to eq(5)
     end
   end
 end

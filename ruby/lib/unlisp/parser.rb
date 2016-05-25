@@ -5,7 +5,8 @@ module Unlisp
     def eval_map(lst, env)
       lst.map do |x|
         if x.list?
-          x = list_eval(x.value, env)
+          lst, _ = list_eval(x.value, env)
+          lst
         elsif x.integer?
           x
         else
@@ -15,24 +16,37 @@ module Unlisp
     end
 
     def list_eval lst, env
-      if lst[0].atom?
+      if !lst.is_a?(Unlisp::Token) && lst[0].list?
+        lst[0], _ = list_eval(lst[0].value, env)
+      end
+
+      if lst.is_a?(Unlisp::Token) && lst.list?
+        list_eval(lst.value, env)
+      elsif lst[0].function?
+        next_env = env.next [lst[0].value[0], lst[1]]
+        result_lst, result_env = list_eval(lst[0].value[1], next_env)
+        result_env.pop!
+        return result_lst, result_env
+      elsif lst[0].atom?
         case lst[0].value
         when "def"
           env.env! [lst[1], lst[2]]
           return lst, env
+        when "fn"
+          return Token.new(Unlisp::Token::FUNCTION, [lst[1], lst[2]]), env
         when "do"
           lst.shift
           last_line = nil
           lst.each {|x| last_line, env = list_eval(x.value, env) }
           return last_line, env
         when "+"
-          Token.new(Unlisp::Token::INTEGER, plus(lst, env))
+          return Token.new(Unlisp::Token::INTEGER, plus(lst, env)), env
         when "println"
           lst.shift
           puts eval_map(lst, env).map {|x| x.print}
         when "'"
           lst.shift
-          Token.new(Unlisp::Token::LIST, lst)
+          return Token.new(Unlisp::Token::LIST, lst), env
         when "head"
           return lst[1].value[1], env
         when "tail"

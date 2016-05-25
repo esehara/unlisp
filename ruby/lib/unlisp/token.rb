@@ -1,5 +1,7 @@
 module Unlisp
-  class Token < Struct.new(:type, :value)
+  class Token
+    attr_accessor :type, :value
+
     # Token types
     INTEGER  = 1
     # STRING   = 2
@@ -7,6 +9,11 @@ module Unlisp
     LIST     = 4
     FUNCTION = 5
     ERROR    = 6
+
+    def initialize(type, value)
+      @type = type
+      @value = value
+    end
 
     def print
       if list?
