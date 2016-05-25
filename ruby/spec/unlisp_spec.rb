@@ -114,5 +114,14 @@ describe Unlisp do
       expect(psr.type).to eq(Unlisp::Token::INTEGER)
       expect(psr.value).to eq(4)
     end
+
+    it '["do", ["def", "plus_one", ["fn", "x", ["+", "x", "1"]]], ["plus_one", "1"]] is 2' do
+      env, lst, psr = analyze_and_eval ["do",
+                                        ["def", "plus_one",
+                                         ["fn", "x", ["+", "x", "1"]]],
+                                        ["plus_one", "1"]]
+      expect(psr.type).to eq(Unlisp::Token::INTEGER)
+      expect(psr.value).to eq(2)
+    end
   end
 end

@@ -65,7 +65,8 @@ module Unlisp
           lst[1].value.shift
           return lst[1], env
         else
-          return env.get lst[0], env
+          lst[0] = env.get(lst[0])
+          return list_eval(lst, env)
         end
       end
     end
