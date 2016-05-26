@@ -59,11 +59,13 @@
          [first-value (send first-token get-value)])
     (cond [(string=? first-value "+")
            (make-token 
-            (apply + (map (lambda (x) (send x get-value)) (cdr tokens))))])))
-
-
-                                     
-                                     
+            (apply + 
+                   (map (lambda (x)
+                          (if (send x list?)
+                              (send (atom<-apply (send x get-value)) get-value)
+                              (send x get-value)))
+                        (cdr tokens))))])))                                    
+                       
 ;; =============================================
 ;; Specification
 ;; =============================================
@@ -82,7 +84,7 @@
                    (send (third test-list) integer?))))
 
 (check-true (let* ([test-list (list-tokenize
-                               (list "+" (list "+" "1" "1") "1"))]
+                               (list "+" (list "+" "1" "1") "2"))]
                    [test-value (send (second test-list) get-value)])
               (and (send (first test-list) atom?)
                    (send (second test-list) list?)
@@ -93,3 +95,4 @@
 
 ;; - Step.2 Parser
 (check-equal? (send (tokens->parser (list "+" "1" "1")) get-value) 2)
+(check-equal? (send (tokens->parser (list "+" (list "+" "1" "1") "2")) get-value) 4)
