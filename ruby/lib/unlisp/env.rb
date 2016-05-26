@@ -16,6 +16,13 @@ module Unlisp
       @env.pop
     end
 
+    def top_env! val
+      atom, value = val
+      env_find = @env.find_all {|x| atom.value == x[0].value}
+      return env! val if env_find.empty?
+      env_find[-1][1] = value
+    end
+
     def next val
       env! val
       newenv = self.clone

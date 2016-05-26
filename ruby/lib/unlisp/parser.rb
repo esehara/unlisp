@@ -23,9 +23,9 @@ module Unlisp
       end
       raise "Not found value: #{lst[1]}" if next_val.nil?
       next_env = env.next [lst[0].value[0], next_val]
-      result_lst, result_env = list_eval(lst[0].value[1], next_env)
-      result_env.pop!
-      return result_lst, result_env
+      result_lst, _ = list_eval(lst[0].value[1], next_env)
+      env.pop!
+      return result_lst, env
     end
 
     def list_eval lst, env
@@ -54,7 +54,7 @@ module Unlisp
           fst, snd = eval_map([lst[1], lst[2]], env)
           return fst.value < snd.value ? Token.true : Token.false, env
         when "def"
-          env.env! [lst[1], lst[2]]
+          env.top_env! [lst[1], lst[2]]
           return lst, env
         when "fn"
           return Token.new(Unlisp::Token::FUNCTION, [lst[1], lst[2]]), env
