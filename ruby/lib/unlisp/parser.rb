@@ -41,6 +41,7 @@ module Unlisp
         case lst[0].value
         when "if"
           lst = lst.clone
+          raise "Syntax Error: if" if lst[2].nil? || lst[3].nil?
           lst[1], _ = list_eval(lst[1], env) if lst[1].list?
           if lst[1].true?
             lst[2], _ = list_eval(lst[2], env) if lst[2].list?
