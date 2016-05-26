@@ -15,6 +15,19 @@ module Unlisp
       end
     end
 
+    def call lst, env
+      if lst[1].list?
+        next_val, _ = list_eval(lst[1].value, env)
+      else
+        next_val = lst[1]
+      end
+      raise "Not found value: #{lst[0]}" if next_val.nil?
+      next_env = env.next [lst[0].value[0], next_val]
+      result_lst, result_env = list_eval(lst[0].value[1], next_env)
+      result_env.pop!
+      return result_lst, result_env
+    end
+
     def list_eval lst, env
       if !lst.is_a?(Unlisp::Token) && lst[0].list?
         lst[0], _ = list_eval(lst[0].value, env)
@@ -23,24 +36,21 @@ module Unlisp
       if lst.is_a?(Unlisp::Token) && lst.list?
         list_eval(lst.value, env)
       elsif lst[0].function?
-        next_env = env.next [lst[0].value[0], lst[1]]
-        result_lst, result_env = list_eval(lst[0].value[1], next_env)
-        result_env.pop!
-        return result_lst, result_env
+        return call(lst, env)
       elsif lst[0].atom?
         case lst[0].value
         when "if"
-          lst[1] = list_eval(lst[1], env) if lst[1].list?
+          lst[1], _ = list_eval(lst[1], env) if lst[1].list?
           if lst[1].true?
-            lst[2] = list_eval(lst[2], env) if lst[2].list?
-            lst[2]
+            lst[2], _ = list_eval(lst[2], env) if lst[2].list?
+            return lst[2], env
           else
-            lst[3] = list_eval(lst[3], env) if lst[3].list?
-            lst[3]
+            lst[3], _ = list_eval(lst[3], env) if lst[3].list?
+            return lst[3], env
           end
         when "<"
           fst, snd = eval_map([lst[1], lst[2]], env)
-          fst.value < snd.value ? Token.true : Token.false
+          return fst.value < snd.value ? Token.true : Token.false, env
         when "def"
           env.env! [lst[1], lst[2]]
           return lst, env
@@ -66,6 +76,10 @@ module Unlisp
           return lst[1], env
         else
           lst[0] = env.get(lst[0])
+          raise "Not found value: #{lst[0]}" if lst[0].nil?
+          if lst[0].function? && lst[1].list?
+            lst[1], _ = list_eval(lst[1], env)
+          end
           return list_eval(lst, env)
         end
       end
