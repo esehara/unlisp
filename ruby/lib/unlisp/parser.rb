@@ -40,6 +40,7 @@ module Unlisp
       elsif lst[0].atom?
         case lst[0].value
         when "if"
+          lst = lst.clone
           lst[1], _ = list_eval(lst[1], env) if lst[1].list?
           if lst[1].true?
             lst[2], _ = list_eval(lst[2], env) if lst[2].list?
@@ -57,6 +58,7 @@ module Unlisp
         when "fn"
           return Token.new(Unlisp::Token::FUNCTION, [lst[1], lst[2]]), env
         when "do"
+          lst = lst.clone
           lst.shift
           last_line = nil
           lst.each {|x| last_line, env = list_eval(x.value, env) }
@@ -64,14 +66,17 @@ module Unlisp
         when "+"
           return Token.new(Unlisp::Token::INTEGER, plus(lst, env)), env
         when "println"
+          lst = lst.clone
           lst.shift
           puts eval_map(lst, env).map {|x| x.print}
         when "'"
+          lst = lst.clone
           lst.shift
           return Token.new(Unlisp::Token::LIST, lst), env
         when "head"
           return lst[1].value[1], env
         when "tail"
+          lst[1] = lst[1].clone
           lst[1].value.shift
           return lst[1], env
         else
@@ -86,6 +91,7 @@ module Unlisp
     end
 
     def plus lst, env
+      lst = lst.clone
       lst.shift
       lst = eval_map(lst, env)
       lst.reduce do |x, y|
