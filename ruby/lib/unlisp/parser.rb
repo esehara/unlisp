@@ -21,7 +21,7 @@ module Unlisp
       else
         next_val = lst[1]
       end
-      raise "Not found value: #{lst[0]}" if next_val.nil?
+      raise "Not found value: #{lst[1]}" if next_val.nil?
       next_env = env.next [lst[0].value[0], next_val]
       result_lst, result_env = list_eval(lst[0].value[1], next_env)
       result_env.pop!
