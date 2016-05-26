@@ -12,7 +12,8 @@ module Unlisp
 
     def machine_eval l
       lst = Unlisp::Lexer::list_analyzer l
-      psr = Unlisp::Parser::list_eval lst @env
+      psr, env = Unlisp::Parser::list_eval lst, @env
+      @env = env
     end
   end
 end

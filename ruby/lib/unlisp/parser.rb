@@ -69,6 +69,7 @@ module Unlisp
           lst = lst.clone
           lst.shift
           puts eval_map(lst, env).map {|x| x.print}
+          return nil, env
         when "'"
           lst = lst.clone
           lst.shift
