@@ -24,7 +24,9 @@ module Unlisp
     end
 
     def get atom
-      @env.find_all {|x| atom.value == x[0].value}[-1][1]
+      env_find = @env.find_all {|x| atom.value == x[0].value}
+      raise "Not found value: #{atom}" if env_find.nil?
+      return env_find[-1][1]
     end
   end
 end
