@@ -66,7 +66,12 @@ module Unlisp
         lst.each {|x| last_line, env = list_eval(x.value, env) }
         return last_line, env
       when "+"
-        return Token.new(Unlisp::Token::INTEGER, plus(lst, env)), env
+        return plus(lst, env), env
+      when "-"
+        return minus(lst, env), env
+      when "="
+        fst, snd = eval_map([lst[1], lst[2]], env)
+        return fst.value == snd.value ? Token.true : Token.false, env
       when "println"
         lst = lst.clone
         lst.shift
@@ -110,6 +115,16 @@ module Unlisp
         return call(lst, env)
       end
     end
+    def minus lst, env
+      lst = lst.clone
+      lst.shift
+      lst = eval_map(lst, env)
+      lst.reduce do |x, y|
+        x, _ = list_eval(x, env) if x.list?
+        y, _ = list_eval(y, env) if y.list?
+        Token.new(Unlisp::Token::INTEGER, x.value - y.value)
+      end
+    end
 
     def plus lst, env
       lst = lst.clone
@@ -118,7 +133,7 @@ module Unlisp
       lst.reduce do |x, y|
         x, _ = list_eval(x, env) if x.list?
         y, _ = list_eval(y, env) if y.list?
-        x.value + y.value
+        Token.new(Unlisp::Token::INTEGER, x.value + y.value)
       end
     end
   end
