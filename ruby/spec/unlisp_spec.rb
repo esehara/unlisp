@@ -132,6 +132,17 @@ describe Unlisp do
                                            ["<", "x", "10"],
                                            ["upto", ["+", "x", "1"]], "x"]]],
                                         ["upto", "5"]]
+      expect(psr.type).to eq(Unlisp::Token::INTEGER)
+      expect(psr.value).to eq(10)
+    end
+
+    it '["do", ["def", "closure", [["fn", "x",["fn", "y", ["+", "x", "y"]]], "5"]], ["closure", "2"]] is 7' do
+      env, lst, psr = analyze_and_eval ["do",
+                                        ["def", "closure",
+                                         [["fn", "x",["fn", "y", ["+", "x", "y"]]], "5"]],
+                                        ["closure", "2"]]
+      expect(psr.type).to eq(Unlisp::Token::INTEGER)
+      expect(psr.value).to eq(7)
     end
   end
 end
