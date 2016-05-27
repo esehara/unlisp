@@ -89,7 +89,9 @@ module Unlisp
         lst[0] = atom
         raise "Not found value: #{lst[0]}" if lst[0].nil?
         if lst[0].function?
-          lst[1], _ = list_eval(lst[1], env)
+          if lst[1].list?
+            lst[1], _ = list_eval(lst[1], env)
+          end
         end
         return list_eval(lst, env)
       end
