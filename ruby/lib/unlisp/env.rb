@@ -24,15 +24,15 @@ module Unlisp
     end
 
     def next val
-      env! val
       newenv = self.clone
       newenv.reset! @env.clone
+      newenv.env! val
       return newenv
     end
 
     def get atom
       env_find = @env.find_all {|x| atom.value == x[0].value}
-      raise "Not found value: #{atom}" if env_find.nil?
+      raise "Not found value: #{atom}" if env_find.empty?
       return env_find[-1][1]
     end
   end
