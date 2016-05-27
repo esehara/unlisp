@@ -1,6 +1,6 @@
 module Unlisp
   class Token
-    attr_accessor :type, :value
+    attr_accessor :type, :value, :env
 
     # Token types
     INTEGER  = 1
@@ -9,6 +9,10 @@ module Unlisp
     LIST     = 4
     FUNCTION = 5
     ERROR    = 6
+
+    def env! env
+      @env = env
+    end
 
     def self.false
       Token.new(INTEGER, 0)
