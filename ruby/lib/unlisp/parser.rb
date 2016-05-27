@@ -16,6 +16,7 @@ module Unlisp
     end
 
     def call lst, env
+      raise "Wrong number of argument" if lst[1].nil?
       if lst[1].list?
         next_val, _ = list_eval(lst[1].value, lst[0].env)
       else
@@ -60,6 +61,7 @@ module Unlisp
         env.top_env! [lst[1], lst[2]]
         return lst, env
       when "fn"
+        raise "Syntax Error: fn" if lst[1].nil? || lst[2].nil?
         fn = Token.new(Unlisp::Token::FUNCTION, [lst[1], lst[2]])
         fn.env! env
         return fn, env
