@@ -14,6 +14,7 @@ module Unlisp
       lst = Unlisp::Lexer::list_analyzer l
       psr, env = Unlisp::Parser::list_eval lst, @env
       @env = env
+      psr
     end
   end
 end
