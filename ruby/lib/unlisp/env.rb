@@ -4,6 +4,10 @@ module Unlisp
       @env = []
     end
 
+    def show_env
+      p @env
+    end
+
     def env! newdef
       @env << newdef
     end
