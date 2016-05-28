@@ -15,21 +15,26 @@ module Unlisp
       end
     end
 
+    def next_val lst
+      if lst[1].list?
+        next_value, _ = list_eval(lst[1].value, lst[0].env)
+      else
+        next_value = lst[1]
+      end
+      return next_value
+    end
+
     def call lst, env
       raise "Wrong number of argument" if lst[1].nil?
-      if lst[1].list?
-        next_val, _ = list_eval(lst[1].value, lst[0].env)
-      else
-        next_val = lst[1]
+      raise "Not found value: #{lst[1]}" if next_val(lst).nil?
+      head = lst[0]
+      head.env = head.env.next [head.value[0], next_val(lst)]
+      if head.value[1].list?
+        result_lst, _ = list_eval(head.value[1], head.env)
+      elsif head.value[1].atom?
+        result_lst, _ = apply_atom(head.value[1], head.value, head.env)
       end
-      raise "Not found value: #{lst[1]}" if next_val.nil?
-      lst[0].env = lst[0].env.next [lst[0].value[0], next_val]
-      if lst[0].value[1].list?
-        result_lst, _ = list_eval(lst[0].value[1], lst[0].env)
-      elsif lst[0].value[1].atom?
-        result_lst, _ = apply_atom(lst[0].value[1], lst[0].value, lst[0].env)
-      end
-      lst[0].env = env
+      head.env = env
       return result_lst, env
     end
 
