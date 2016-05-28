@@ -152,5 +152,27 @@ describe Unlisp do
       expect(psr.type).to eq(Unlisp::Token::INTEGER)
       expect(psr.value).to eq(4)
     end
+
+    it 'fib 6 is 13' do
+      env, lst, psr = analyze_and_eval ["do", [
+                  "def", "fib",
+                  ["fn", "n",
+                   ["if", ["=", "n", "0"], "0",
+                    ["if", ["=", "n", "1"], "1",
+                     ["+", ["fib", ["-", "n", "1"]], ["fib", ["-", "n", "2"]]]]]]], ["fib", "6"]]
+      expect(psr.type).to eq(Unlisp::Token::INTEGER)
+      expect(psr.value).to eq(13)
+    end
+
+    it 'fib 6 by 2times results same' do
+      env, lst, psr = analyze_and_eval ["do", [
+                  "def", "fib",
+                  ["fn", "n",
+                   ["if", ["=", "n", "0"], "0",
+                    ["if", ["=", "n", "1"], "1",
+                     ["+", ["fib", ["-", "n", "1"]], ["fib", ["-", "n", "2"]]]]]]], ["fib", "6"], ["fib", "6"]]
+      expect(psr.type).to eq(Unlisp::Token::INTEGER)
+      expect(psr.value).to eq(13)
+    end
   end
 end
