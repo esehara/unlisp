@@ -39,6 +39,7 @@ module Unlisp
     end
 
     def apply_atom atom, lst, env
+      lst = lst.clone
       case atom.value
       when "if"
         lst = lst.clone

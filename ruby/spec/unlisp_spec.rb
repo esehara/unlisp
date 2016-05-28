@@ -159,7 +159,7 @@ describe Unlisp do
                   ["fn", "n",
                    ["if", ["=", "n", "0"], "0",
                     ["if", ["=", "n", "1"], "1",
-                     ["+", ["fib", ["-", "n", "1"]], ["fib", ["-", "n", "2"]]]]]]], ["fib", "6"]]
+                     ["+", ["fib", ["-", "n", "1"]], ["fib", ["-", "n", "2"]]]]]]], ["fib", "7"]]
       expect(psr.type).to eq(Unlisp::Token::INTEGER)
       expect(psr.value).to eq(13)
     end
@@ -170,7 +170,7 @@ describe Unlisp do
                   ["fn", "n",
                    ["if", ["=", "n", "0"], "0",
                     ["if", ["=", "n", "1"], "1",
-                     ["+", ["fib", ["-", "n", "1"]], ["fib", ["-", "n", "2"]]]]]]], ["fib", "6"], ["fib", "6"]]
+                     ["+", ["fib", ["-", "n", "1"]], ["fib", ["-", "n", "2"]]]]]]], ["fib", "7"], ["fib", "7"]]
       expect(psr.type).to eq(Unlisp::Token::INTEGER)
       expect(psr.value).to eq(13)
     end
