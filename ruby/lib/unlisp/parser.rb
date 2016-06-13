@@ -38,28 +38,47 @@ module Unlisp
       return result_lst, env
     end
 
+    def eval_if atom, lst, env
+      lst = lst.clone
+      raise "Syntax Error: if" if lst[2].nil? || lst[3].nil?
+      lst[1], _ = list_eval(lst[1], env)
+      if lst[1].true?
+        if lst[2].list? || lst[2].function?
+          lst[2], _ = list_eval(lst[2], env)
+        elsif lst[2].atom?
+          return apply_atom(lst[2], lst[2], env)
+        end
+        return lst[2], env
+      else
+        if lst[3].list? || lst[3].function?
+          lst[3], _ = list_eval(lst[3], env)
+        elsif lst[3].atom?
+          return apply_atom(lst[3], lst[3], env)
+        end
+        return lst[3], env
+      end
+    end
+
+    def user_def atom, lst, env
+      if atom.atom?
+        atom = env.get(atom)
+        return atom, env if atom.integer?
+      end
+      lst[0] = atom
+      raise "Not found value: #{lst[0]}" if lst[0].nil?
+      if lst[0].function?
+        if lst[1].list?
+          lst[1], _ = list_eval(lst[1], env)
+        end
+      end
+      return list_eval(lst, env)
+    end
+
     def apply_atom atom, lst, env
       lst = lst.clone
       case atom.value
       when "if"
-        lst = lst.clone
-        raise "Syntax Error: if" if lst[2].nil? || lst[3].nil?
-        lst[1], _ = list_eval(lst[1], env)
-        if lst[1].true?
-          if lst[2].list? || lst[2].function?
-            lst[2], _ = list_eval(lst[2], env)
-          elsif lst[2].atom?
-            return apply_atom(lst[2], lst[2], env)
-          end
-          return lst[2], env
-        else
-          if lst[3].list? || lst[3].function?
-            lst[3], _ = list_eval(lst[3], env)
-          elsif lst[3].atom?
-            return apply_atom(lst[3], lst[3], env)
-          end
-          return lst[3], env
-        end
+        return eval_if atom, lst, env
       when "<"
         fst, snd = eval_map([lst[1], lst[2]], env)
         return fst.value < snd.value ? Token.true : Token.false, env
@@ -100,18 +119,7 @@ module Unlisp
         lst[1].value.shift
         return lst[1], env
       else
-        if atom.atom?
-          atom = env.get(atom)
-          return atom, env if atom.integer?
-        end
-        lst[0] = atom
-        raise "Not found value: #{lst[0]}" if lst[0].nil?
-        if lst[0].function?
-          if lst[1].list?
-            lst[1], _ = list_eval(lst[1], env)
-          end
-        end
-        return list_eval(lst, env)
+        return user_def atom, lst, env
       end
     end
 
