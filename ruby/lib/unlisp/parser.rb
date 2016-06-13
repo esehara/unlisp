@@ -34,7 +34,6 @@ module Unlisp
       elsif head.value[1].atom?
         result_lst, _ = apply_atom(head.value[1], head.value, head.env)
       end
-      head.env = env
       return result_lst, env
     end
 
