@@ -27,7 +27,7 @@ module Unlisp
     end
 
     def true?
-      integer? && value == 1
+      integer? && value != 0
     end
 
     def initialize(type, value)
